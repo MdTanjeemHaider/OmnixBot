@@ -64,6 +64,7 @@ class Soundboard(commands.Cog):
         # Check voice connection
         if not user.voice:
             await reply("You must be in a voice channel to use this!", ephemeral=ephemeral)
+            return
 
         voice_client = guild.voice_client
         voice_channel = user.voice.channel
