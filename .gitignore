@@ -1,0 +1,7 @@
+__pycache__/
+.idea
+.venv
+.code
+/data
+/resources
+config.ini
