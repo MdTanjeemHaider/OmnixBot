@@ -36,7 +36,7 @@ class Config:
                 self.soundboard_custom_names[key] = value
 
         except Exception as e:
-            print(f"Error loading config: {e}")
+            raise RuntimeError(f"Failed to load config: {e}") from e
 
 
     def create_config(self):
