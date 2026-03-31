@@ -83,7 +83,7 @@ class Soundboard(commands.Cog):
 
     def create_sound_button(self, sound_path):
         """Create a button for a sound."""
-        sound_name = os.path.basename(sound_path).split(".")[0]
+        sound_name = os.path.splitext(os.path.basename(sound_path))[0]
         label = self.custom_names.get(sound_name, sound_name)
 
         button = discord.ui.Button(label=label, style=discord.ButtonStyle.primary)

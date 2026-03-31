@@ -10,7 +10,7 @@ def normalize_and_fetch(raw_folder, normalized_folder, target_dbfs):
     """Normalize all MP3 files and return list of normalized paths."""
     normalized_sounds = []
     for file in os.listdir(raw_folder):
-        if file.endswith("mp3"):
+        if file.lower().endswith(".mp3"):
             raw_path = os.path.join(raw_folder, file)
             normalized_path = os.path.join(normalized_folder, file)
             normalized_sounds.append(normalized_path)
