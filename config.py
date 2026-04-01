@@ -31,6 +31,14 @@ class Config:
             # Soundboard cog settings
             self.soundboard_cog_enabled = self.config.getboolean("Soundboard", "enabled", fallback=True)
             self.soundboard_target_dbfs = self.config.getint("Soundboard", "target_dbfs", fallback=-36)
+            self.soundboard_whitelist = []
+            whitelist = self.config.get("Soundboard", "whitelist", fallback="")
+            if whitelist != "":
+                whitelist = whitelist.replace(" ", "")
+                whitelist = whitelist.split(",")
+
+                for user_id in whitelist:
+                    self.soundboard_whitelist.append(int(user_id))
             self.soundboard_custom_names = {}
             for key, value in self.config.items("SoundboardCustomNames"):
                 self.soundboard_custom_names[key] = value

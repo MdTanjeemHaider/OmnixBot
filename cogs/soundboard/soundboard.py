@@ -32,21 +32,69 @@ class Soundboard(commands.Cog):
 
         self.sounds = normalize_and_fetch(self.raw_folder, self.normalized_folder, self.target_dbfs)
 
+    @commands.group(name="soundboard", aliases=["sb"], case_insensitive=True, invoke_without_command=True)
+    async def soundboard(self, context: commands.Context):
+        # If incorrect arguments were passed
+        if len(context.message.content.split()) > 1:
+            await context.send(f"Invalid subcommand! Use {context.prefix}help sb to see available commands.")
+            return
 
-    @commands.command(name="soundboard", aliases=["sb"])
-    async def soundboard_command(self, context, *, sound_name=None):
-        """Show soundboard or play a specific sound."""
-        if sound_name:
-            sound_path = os.path.join(self.normalized_folder, f"{sound_name}.mp3")
-            if sound_path not in self.sounds:
-                await context.send(f"Sound '{sound_name}' not found!")
-                return
-            await self.play_sound(context, sound_path, is_interaction=False)
-        else:
-            if len(self.sounds) == 0:
-                await context.send("No sounds found!")
-                return
-            await self.show_soundboard(context)
+        if len(self.sounds) == 0:
+            await context.send("No sounds found!")
+            return
+
+        await self.show_soundboard(context)
+
+    @soundboard.command(name="play", aliases=["p"])
+    async def play_command(self, context: commands.Context, *, sound_name:str):
+        if not sound_name:
+            await context.send("Sound name is required!")
+            return
+
+        sound_path = os.path.join(self.normalized_folder, f"{sound_name.lower()}.mp3")
+        if sound_path not in self.sounds:
+            await context.send(f"Sound '{sound_name}' not found!")
+            return
+
+        await self.play_sound(context, sound_path, is_interaction=False)
+
+    @soundboard.command(name="add")
+    async def add_command(self, context: commands.Context):
+        # Check permissions
+        if not context.author.guild_permissions.administrator and context.author.id not in config.soundboard_whitelist:
+            await context.send("You must be administrator (or whitelisted) to add commands!")
+            return
+
+        if not context.message.attachments:
+            await context.send("Please attach an audio file with the command!")
+            return
+
+        failed_files = ""
+        success_count = 0
+        for attachment in context.message.attachments:
+            filename = attachment.filename.lower()
+            if not filename.endswith(".mp3"):
+                failed_files += f"\n{filename}: Not a mp3!"
+                continue
+
+            # Check if file already exists
+            raw_path = os.path.join(self.raw_folder, filename)
+            if os.path.exists(raw_path):
+                failed_files += f"\n{filename}: File already exists!"
+                continue
+
+            try:
+                await attachment.save(raw_path)
+                success_count += 1
+            except Exception as e:
+                failed_files += f"\n{filename}: {e}"
+
+        self.sounds = normalize_and_fetch(self.raw_folder, self.normalized_folder, self.target_dbfs)
+
+        if success_count > 0:
+            await context.send(f"Successfully added {success_count} sounds!")
+        if len(failed_files) != 0:
+            await context.send(f"Errors:{failed_files}")
 
     async def play_sound(self, context, sound_path, is_interaction):
         """Connect to voice channel and play the sound."""
@@ -125,13 +173,12 @@ class Soundboard(commands.Cog):
 
             await context.send(view=layout_view)
 
-    @commands.command(name="reload", aliases=["r"])
-    async def reload_soundboard(self, context, *, cog_name = None):
+    @soundboard.command(name="reload", aliases=["r"])
+    async def reload_command(self, context: commands.Context):
         """Reload sounds from the raw folder."""
-        if cog_name == "soundboard" or cog_name == "sb":
-            self.sounds = normalize_and_fetch(self.raw_folder, self.normalized_folder, self.target_dbfs)
-        else:
-            return
+        self.sounds = normalize_and_fetch(self.raw_folder, self.normalized_folder, self.target_dbfs)
+        await context.send("Reloaded sounds!")
+
 
 async def setup(bot):
     await bot.add_cog(Soundboard(bot))
