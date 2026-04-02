@@ -31,6 +31,7 @@ class Config:
             # Soundboard cog settings
             self.soundboard_cog_enabled = self.config.getboolean("Soundboard", "enabled", fallback=True)
             self.soundboard_target_dbfs = self.config.getint("Soundboard", "target_dbfs", fallback=-36)
+            self.soundboard_max_idle_time = self.config.getint("Soundboard", "max_idle_time", fallback=20)
             self.soundboard_whitelist = []
             whitelist = self.config.get("Soundboard", "whitelist", fallback="")
             if whitelist != "":

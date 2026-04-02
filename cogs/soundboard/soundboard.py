@@ -1,7 +1,7 @@
 """
 Soundboard cog - plays audio in voice channels with buttons or commands.
 """
-
+import asyncio
 import os
 import discord
 from discord.ext import commands
@@ -25,6 +25,8 @@ class Soundboard(commands.Cog):
         self.normalized_folder = "resources/sounds/normalized/"
         self.target_dbfs = config.soundboard_target_dbfs
         self.custom_names = config.soundboard_custom_names
+        self.idle_timers = {}
+        self.max_idle_time = config.soundboard_max_idle_time
 
         # Create folders if they don't exist
         os.makedirs(self.raw_folder, exist_ok=True)
@@ -154,9 +156,26 @@ class Soundboard(commands.Cog):
         try:
             if voice_client.is_playing():
                 voice_client.stop()
+
             voice_client.play(discord.FFmpegPCMAudio(sound_path))
+
+            await self.start_idle_timer(guild.id, voice_client)
         except Exception as e:
             print(f'Failed to play sound: {e}')
+
+    async def start_idle_timer(self, guild_id, voice_client: discord.VoiceClient):
+        # Cancel any previous timer
+        if guild_id in self.idle_timers:
+            self.idle_timers[guild_id].cancel()
+            self.idle_timers.pop(guild_id)
+
+        async def disconnect():
+            await asyncio.sleep(self.max_idle_time)
+            if voice_client and voice_client.is_connected():
+                await voice_client.disconnect()
+
+        task = asyncio.create_task(disconnect())
+        self.idle_timers[guild_id] = task
 
     def create_sound_button(self, sound_path):
         """Create a button for a sound."""
