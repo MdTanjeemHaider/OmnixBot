@@ -8,6 +8,9 @@ from pydub import AudioSegment
 
 def normalize_and_fetch(raw_folder, normalized_folder, target_dbfs):
     """Normalize all MP3 files and return list of normalized paths."""
+    # Rename to lowercase first
+    rename_all_to_lowercase(raw_folder)
+
     normalized_sounds = []
     for file in os.listdir(raw_folder):
         if file.lower().endswith(".mp3"):
@@ -31,3 +34,20 @@ def normalize(audio, target_dbfs):
     normalized_audio = audio.apply_gain(gain_needed)
 
     return normalized_audio
+
+
+def rename_all_to_lowercase(folder):
+    """Rename all files in folder to lowercase."""
+    for file in os.listdir(folder):
+        rename_to_lowercase(os.path.join(folder, file))
+
+
+def rename_to_lowercase(path:str):
+    """Replaces a file name with lowercase."""
+    directory = os.path.dirname(path)
+    filename = os.path.basename(path)
+    lowercase_filename = filename.lower()
+
+    if lowercase_filename != filename:
+        lowercase_path = os.path.join(directory, lowercase_filename)
+        os.rename(path, lowercase_path)

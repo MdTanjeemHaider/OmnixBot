@@ -96,6 +96,35 @@ class Soundboard(commands.Cog):
         if len(failed_files) != 0:
             await context.send(f"Errors:{failed_files}")
 
+
+    @soundboard.command(name="remove")
+    async def remove_command(self, context: commands.Context, *, sound_name:str = None):
+        # Check permissions
+        if not context.author.guild_permissions.administrator and context.author.id not in config.soundboard_whitelist:
+            await context.send("You must be administrator (or whitelisted) to add commands!")
+            return
+
+        if not sound_name:
+            await context.send("Sound name is required!")
+            return
+
+        sound_path_normalized = os.path.join(self.normalized_folder, f"{sound_name.lower()}.mp3")
+        if sound_path_normalized not in self.sounds:
+            await context.send(f"Sound '{sound_name}' not found!")
+            return
+
+        sound_path_raw = os.path.join(self.raw_folder, f"{sound_name.lower()}.mp3")
+        try:
+            os.remove(sound_path_normalized)
+            os.remove(sound_path_raw)
+        except Exception as e:
+            await context.send(f"Failed to remove {sound_name}: {e}")
+
+        self.sounds = normalize_and_fetch(self.raw_folder, self.normalized_folder, self.target_dbfs)
+
+        await context.send(f"Successfully removed {sound_name}!")
+
+
     async def play_sound(self, context, sound_path, is_interaction):
         """Connect to voice channel and play the sound."""
         if is_interaction:
