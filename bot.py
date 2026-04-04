@@ -29,7 +29,9 @@ class OmnixBot(commands.Bot):
 
 def main():
     # Required permissions
-    intents = discord.Intents.all()
+    intents = discord.Intents.default()
+    intents.members = True
+    intents.message_content = True
     client = OmnixBot(command_prefix=config.command_prefix, intents=intents)
 
     # Start the bot
