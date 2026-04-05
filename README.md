@@ -1,4 +1,4 @@
-# OmnixBot
+# <img src=resources/icon.gif width="64"> OmnixBot
 A modular Discord bot designed to serve as a centralized platform for various server utilities, with the flexibility to expand as needs grow.
 
 # Table of Contents
@@ -17,8 +17,8 @@ Automatically saves and restores nicknames and roles when members leave and rejo
 Play audio sounds in voice channels using commands or an interactive button menu.
 
 #### Soundboard Commands
-| Command                                  | Description                                     |
-| ---------------------------------------- | ----------------------------------------------- |
+| Command                              | Description                                     |
+|--------------------------------------|-------------------------------------------------|
 | `soundboard` or `sb`                 | Display the interactive soundboard with buttons |
 | `soundboard <sound>` or `sb <sound>` | Play a specific sound                           |
 | `reload soundboard` or `r sb`        | Refresh the sound list after adding new files   |
@@ -61,7 +61,7 @@ Play audio sounds in voice channels using commands or an interactive button menu
    python bot.py
    ```
 
-   On your first run, the bot will ask for your discord bot token, paste it and press enter. A `config.ini` file will be created for you to change settings aswell.
+   On your first run, the bot will ask for your discord bot token, paste it and press enter. A `config.ini` file will be created for you to change settings as well.
 
 ## Contributing
 Contributions, forks, and feedback are all welcome! Feel free to contribute to OmnixBot's development, suggest improvements, or report any issues on the GitHub repository.

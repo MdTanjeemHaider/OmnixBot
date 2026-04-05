@@ -3,5 +3,8 @@ __pycache__/
 .venv
 .code
 /data
-/resources
+/resources/**
 config.ini
+
+# Exceptions
+!/resources/icon.gif

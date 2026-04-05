@@ -8,6 +8,15 @@ from config import config
 
 class OmnixBot(commands.Bot):
     async def setup_hook(self):
+        await self.load_cogs()
+
+
+    async def on_ready(self):
+        print(f'Logged in as {self.user}')
+        await self.set_avatar()
+
+
+    async def load_cogs(self):
         cogs = []
         if config.persistence_cog_enabled:
             cogs.append("cogs.persistence.persistence")
@@ -23,8 +32,15 @@ class OmnixBot(commands.Bot):
             except Exception as e:
                 print(f'Failed to load extension {cog}: {e}')
 
-    async def on_ready(self):
-        print(f'Logged in as {self.user}')
+
+    async def set_avatar(self):
+        try:
+            with open("resources/icon.gif", "rb") as avatar:
+                avatar_bytes = avatar.read()
+
+            await self.user.edit(avatar=avatar_bytes)
+        except Exception as e:
+            print(f'Failed to set avatar: {e}')
 
 
 def main():
