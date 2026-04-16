@@ -196,7 +196,7 @@ class Soundboard(commands.Cog):
         sound_views = split_list(self.sounds, sounds_per_view)
 
         for i, sound_batch in enumerate(sound_views):
-            layout_view = discord.ui.LayoutView()
+            layout_view = discord.ui.LayoutView(timeout=None)
             if i == 0:
                 layout_view.add_item(discord.ui.TextDisplay("## 🔊 Soundboard 🔊"))
                 layout_view.add_item(discord.ui.Separator())
