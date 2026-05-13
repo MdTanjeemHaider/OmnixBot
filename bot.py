@@ -24,9 +24,6 @@ class OmnixBot(commands.Bot):
         if config.soundboard_cog_enabled:
             cogs.append("cogs.soundboard.soundboard")
 
-        if config.typeracer_cog_enabled:
-            cogs.append("cogs.typeracer.typeracer")
-
         if config.tts_cog_enabled:
             cogs.append("cogs.tts.tts")
 
