@@ -44,6 +44,10 @@ class Config:
             for key, value in self.config.items("SoundboardCustomNames"):
                 self.soundboard_custom_names[key] = value
 
+            # TTS cog settings:
+            self.tts_cog_enabled = self.config.getboolean("TTS", "enabled", fallback=True)
+            self.tts_channel_id = self.config.getint("TTS", "channel_id", fallback=0)
+
         except Exception as e:
             raise RuntimeError(f"Failed to load config: {e}") from e
 

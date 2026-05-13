@@ -5,6 +5,7 @@ __pycache__/
 /data
 /resources/**
 config.ini
+temp.mp3
 
 # Exceptions
 !/resources/icon.gif
