@@ -14,30 +14,20 @@ A modular Discord bot designed to serve as a centralized platform for various se
 Automatically saves and restores nicknames and roles when members leave and rejoin the server.
 
 ### Soundboard
-Play audio sounds in voice channels using commands or an interactive button menu.
+Play audio clips in voice channels using commands or an interactive button menu.
 
-#### Soundboard Commands
-| Command                              | Description                                     |
-|--------------------------------------|-------------------------------------------------|
-| `soundboard` or `sb`                 | Display the interactive soundboard with buttons |
-| `soundboard <sound>` or `sb <sound>` | Play a specific sound                           |
-| `reload soundboard` or `r sb`        | Refresh the sound list after adding new files   |
+### Text-to-Speech (TTS)
+Converts text messages from a designated channel (configurable in `config.ini`) and reads the message out loud to the sender's voice channel.
+### Commands
+Use `{prefix}help` to display all available commands and their detailed information.
 
 *Note: All commands must start with the prefix set in config.ini (Default is ``~``)*
-
-#### Adding Sounds to Soundboard
-1. Place MP3 files in `resources/sounds/raw/`
-2. Run `reload soundboard` or restart the bot
-3. Optional: Add custom display names in `config.ini` under `[SoundboardCustomNames]`:
-   ```ini
-   [SoundboardCustomNames]
-   filename_without_extension = Custom Display Name 😊
-   ```
 
 ## Prerequisites
 - Python 3.14 or above
 - FFmpeg installed (must be in path)
 - Discord Bot Token: [Discord Developer Portal](https://discord.com/developers/applications)
+- [uv](https://github.com/astral-sh/uv)
 
 ## Installation
 1. Clone the repository:
@@ -45,20 +35,15 @@ Play audio sounds in voice channels using commands or an interactive button menu
     git clone https://github.com/MdTanjeemHaider/omnixbot.git 
     cd omnixbot
    ```
-2. Create and activate a virtual environment:
+
+2. Install dependencies:
    ```bash
-   python -m venv venv
+   uv sync
    ```
 
-   - Windows: `venv\Scripts\activate`
-   - macOS/Linux: `source venv/bin/activate`
-3. Install dependencies:
+3. Run the bot:
    ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the bot:
-   ```bash
-   python bot.py
+   uv run bot.py
    ```
 
    On your first run, the bot will ask for your discord bot token, paste it and press enter. A `config.ini` file will be created for you to change settings as well.

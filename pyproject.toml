@@ -1,0 +1,11 @@
+[project]
+name = "OmnixBot"
+version = "0.2.0"
+description = "A modular Discord bot designed to serve as a centralized platform for various server utilities, with the flexibility to expand as needs grow."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "discord-py[voice]>=2.7.1",
+    "gtts>=2.5.4",
+    "pydub>=0.25.1",
+]
